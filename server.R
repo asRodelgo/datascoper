@@ -1,5 +1,5 @@
 #
-source("global_utils.R", local = TRUE) #global functions available for the whole session
+source("global.R", local = TRUE) #global functions available for the whole session
 
 function(input, output, session) {
   

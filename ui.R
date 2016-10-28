@@ -5,12 +5,12 @@ library(shinyBS)
 library(shinyjs)
 library(V8)
 
-source("global_utils.R", local = TRUE)
+source("global.R", local = TRUE)
 
 
 tagList(
   shinyjs::useShinyjs(),
-  includeCSS("css/shinytcmn.css"),
+  includeCSS("css/datascoper.css"),
     
   fluidPage(
       fluidRow(
