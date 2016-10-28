@@ -48,9 +48,9 @@
           geom_point(data=tsne_points_filter,aes(color = eval(parse(text=colIndicator))),size=2) +
           scale_color_gradient2(midpoint=mean(eval(parse(text=paste0("tsne_points_filter$",colIndicator)))), low="blue", mid="white",high="red")+
           geom_point(data=tsne_points_filter_out,color=alpha("lightgrey",0.1)) + 
-          theme(legend.key=element_blank(),
+          theme(#legend.key=element_blank(),
                 legend.title=element_blank(),
-                #legend.text = element_blank(),
+                legend.text = element_text(size = 10),
                 legend.position = "top",
                 panel.border = element_blank(),
                 panel.background = element_blank(),
@@ -66,7 +66,7 @@
           geom_point(data=tsne_points_filter_out,color=alpha("lightgrey",0.1)) + 
           theme(legend.key=element_blank(),
                 legend.title=element_blank(),
-                #legend.text = element_blank(),
+                legend.text = element_text(size = 10),
                 legend.position = "top",
                 panel.border = element_blank(),
                 panel.background = element_blank(),
@@ -88,7 +88,7 @@
           geom_text(data=tsne_points_filter,aes(label=str_wrap(paste0(CountryShort," (",Period,")"))),color="grey",nudge_y=0.1)+
           theme(legend.key=element_blank(),
                 legend.title=element_blank(),
-                #legend.text = element_blank(),
+                legend.text = element_text(size = 15),
                 legend.position = "top",
                 panel.border = element_blank(),
                 panel.background = element_blank(),
@@ -104,7 +104,7 @@
           geom_point(data=centroid,color="red",size=3) + 
           theme(legend.key=element_blank(),
                 legend.title=element_blank(),
-                #legend.text = element_blank(),
+                legend.text = element_text(size = 15),
                 legend.position = "top",
                 panel.border = element_blank(),
                 panel.background = element_blank(),

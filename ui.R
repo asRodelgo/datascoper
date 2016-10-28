@@ -18,6 +18,8 @@ tagList(
       #HTML('<hr style="color: purple;">'),
       column(10,
              fluidRow(
+               tags$img(src = "spinner.gif",
+                        id = "loading-spinner"),
                plotOutput('plotTSNE', height = "700px",
                           hover = hoverOpts("plot_hover", delay = 100, delayType = "debounce"),
                           click = clickOpts("plot_click"),

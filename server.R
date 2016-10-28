@@ -16,6 +16,7 @@ function(input, output, session) {
     } else {
       plotTSNE <- plotTSNE + coord_cartesian(xlim = ranges$x, ylim = ranges$y)
     }
+    #Sys.sleep(2)
     return(plotTSNE)
   })
   
