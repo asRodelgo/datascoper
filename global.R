@@ -17,11 +17,6 @@ source("data/read_data.R", local = TRUE)
 # session
 helpers <- file.path("helper_functions", list.files("helper_functions", full.names = FALSE))
 for (h in helpers) source(h, local = TRUE)
-#source(file.path("server_files","utilities","ppcheck_names_descriptions.R"), local = TRUE)
-
-# PDF report R scripts
-source("reporting/ReportGenerator.R", local = TRUE)
-#source("reporting/TCMN_charts_PDF.R", local = TRUE)
 
 # ----------- tSNE data topology
 data_tsne <- .prepare_data()

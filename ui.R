@@ -2,7 +2,6 @@
 library(shiny)
 library(shinythemes)
 library(shinyBS)
-# use javascript
 library(shinyjs)
 library(V8)
 
@@ -28,18 +27,12 @@ tagList(
                         )
                  ),
                  column(3,h4("Color by"),
-                        #splitLayout(cellWidths = c("62%", "36%"),
                         selectizeInput('colIndicator', 'Indicator:', choices=c("All",sort(names(data_tsne_sample)[c(6:ncol(data_tsne_sample))])),
                                        options = list(dropdownParent = 'body'))
-                        #radioButtons('centralMeasure', 'Centrality:', c("mean","median"))
-                        #)
                  )
                ),
                fluidRow(
-                 #div(
-                 #style = "position:relative",
                  actionLink('help_click',"Help",icon = icon("info-sign", lib = "glyphicon")),
-                 #bsModal('popupHelp', "How does it work?", 'help_click', size = "large", uiOutput('help_text')),
                  bsPopover('help_click', "Help",content = paste0('<p>The cloud of points represents a projection of 40 indicators in 2 dimensions using ',
                                                                  '<a href=',tsne_url,' target="_blank">tSNE</a>. ',
                                                                  'Each of the points corresponds to a country and a year. Basic controls:</p>',
@@ -58,16 +51,9 @@ tagList(
                             brush = brushOpts("plot_brush", delay = 100, delayType = "debounce"),
                             dblclick = "plot_dblclick"),
                  uiOutput("hover_info")
-                 #)
-                 #,
-                 #div(style = "position:relative",
-                 #    plotOutput('plotRadarBrushed_Def')
-                 #)
                ),
                fluidRow(
-                 #div(style = "position:relative",
                  DT::dataTableOutput('tableBrushed')
-                 #)
                )
         ),
         column(3,h4("Select variables to explore"),
@@ -77,22 +63,10 @@ tagList(
                ),
                br(),
                plotOutput('plotBoxplotBrushed')
-               #radioButtons('pickChart', 'Select chart:', c("box plot","bar chart"),
-               #              selected = "box plot", inline = TRUE),
-               #conditionalPanel(
-               #   condition = "input.pickChart == 'box plot'", plotOutput('plotBoxplotBrushed')),
-               # conditionalPanel(
-               #   condition = "input.pickChart == 'bar chart'", plotOutput('plotBarchartBrushed'))
-               #            ),
-               #            div(style = "position:relative",
-               #                #plotOutput('plotBarchartBrushed')
-               #                plotOutput('plotBoxplotBrushed')
-               #            )
+             
         )
       )        
-      #br(),
-      #div(style = "position:relative",plotOutput('plotTSNEdensities',height="150px")),
-      #br(),
+      
       
     )
   )
