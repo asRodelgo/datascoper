@@ -14,6 +14,7 @@ tagList(
     
   fluidPage(
       fluidRow(
+        includeHTML(file.path("html", "datascoper_title.Rhtml")),
         column(9,
                fluidRow(
                  column(9,h4("Filter by"),
