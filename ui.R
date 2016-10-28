@@ -15,6 +15,7 @@ tagList(
   fluidPage(
     fluidRow(
       includeHTML(file.path("html", "datascoper_title.Rhtml")),
+      #HTML('<hr style="color: purple;">'),
       column(10,
              fluidRow(
                plotOutput('plotTSNE', height = "700px",
