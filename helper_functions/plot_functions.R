@@ -351,12 +351,13 @@
         coord_flip() +
         theme(legend.key=element_blank(),
               legend.title=element_blank(),
+              legend.text = element_text(size = 12),
               legend.position="top",
               panel.border = element_blank(),
               panel.background = element_blank(),
               plot.title = element_text(lineheight=.5),
               #axis.text.x = element_blank(),
-              #axis.text.y = element_blank(),
+              axis.text.y = element_text(size=13),
               axis.title.x = element_blank(),
               axis.title.y = element_blank()
               #axis.ticks = element_blank()
@@ -371,12 +372,13 @@
         coord_flip() +
         theme(legend.key=element_blank(),
               legend.title=element_blank(),
+              legend.text = element_text(size = 12),
               legend.position="top",
               panel.border = element_blank(),
               panel.background = element_blank(),
               plot.title = element_text(lineheight=.5),
               #axis.text.x = element_blank(),
-              #axis.text.y = element_blank(),
+              axis.text.y = element_text(size=13),
               axis.title.x = element_blank(),
               axis.title.y = element_blank()
               #axis.ticks = element_blank()
@@ -399,11 +401,12 @@
       coord_flip() +
       theme(legend.key=element_blank(),
             legend.title=element_blank(),
+            legend.text = element_text(size = 12),
             legend.position="top",
             panel.border = element_blank(),
             panel.background = element_blank(),
             plot.title = element_text(lineheight=.5),
-            #axis.text.x = element_blank(),
+            axis.text.y = element_text(size=13),
             #axis.text.y = element_blank(),
             axis.title.x = element_blank(),
             axis.title.y = element_blank()

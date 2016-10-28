@@ -66,10 +66,14 @@ tagList(
     ),
     fluidRow(
       column(9,
-        DT::dataTableOutput('tableBrushed')
+#              tags$img(src = "spinner.gif",
+#                       id = "loading-spinner"),
+             DT::dataTableOutput('tableBrushed')
       ),
       column(3,
         br(),
+        tags$img(src = "spinner.gif",
+                 id = "loading-spinner"),
         plotOutput('plotBoxplotBrushed')
       )
     )  
