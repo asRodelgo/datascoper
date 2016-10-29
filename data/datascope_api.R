@@ -18,15 +18,28 @@ indicators_1_2 <- indicators %>%
 
 # Query data based on ids of filtered indicators
 # loop by country and indicator id. Bind it all in a data.frame
+datascope <- data.frame()
 
-for (cou in ){
-  for (){
-    thisQuery <- fromJSON("http://datascope-prod.amida-demo.com/api/v1/data?countries=BRA&indicators=2760",
+for (cou in c("BRA")){
+#for (cou in countries$id){
+  for (ind in indicators_1_2$id){
+    print(paste0("Processing...",cou," ",ind))
+    thisQuery <- fromJSON(paste0("http://datascope-prod.amida-demo.com/api/v1/data?countries=",cou,
+                                 "&indicators=",ind),
                           flatten = TRUE)
-    thisQuery <- flatten(thisQuery$data$indicators[[1]])
-    thisQuery <- select(thisQuery, -estimated)
-    names(thisQuery) <- gsub("values.","",names(thisQuery),fixed=TRUE)
-    
+    if (length(thisQuery$data)>0){
+      thisQuery <- flatten(thisQuery$data$indicators[[1]])
+      thisQuery <- thisQuery %>%
+        select(-contains("estimated")) %>%
+        mutate(iso3 = cou)
+      names(thisQuery) <- gsub("values.","",names(thisQuery),fixed=TRUE)
+      names(thisQuery) <- ifelse(grepl("-",names(thisQuery)),substr(names(thisQuery),1,4),names(thisQuery))
+      if (nrow(datascope)==0) {
+        datascope <- thisQuery
+      } else {
+        datascope <- bind_rows(datascope,thisQuery)
+      }
+    }
   }
 }
 
