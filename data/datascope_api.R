@@ -20,8 +20,8 @@ indicators_1_2 <- indicators %>%
 # loop by country and indicator id. Bind it all in a data.frame
 datascope <- data.frame()
 
-for (cou in c("BRA")){
-#for (cou in countries$id){
+#for (cou in c("BRA")){
+for (cou in countries$id){
   for (ind in indicators_1_2$id){
     print(paste0("Processing...",cou," ",ind))
     thisQuery <- fromJSON(paste0("http://datascope-prod.amida-demo.com/api/v1/data?countries=",cou,
@@ -30,10 +30,13 @@ for (cou in c("BRA")){
     if (length(thisQuery$data)>0){
       thisQuery <- flatten(thisQuery$data$indicators[[1]])
       thisQuery <- thisQuery %>%
-        select(-contains("estimated")) %>%
         mutate(iso3 = cou)
       names(thisQuery) <- gsub("values.","",names(thisQuery),fixed=TRUE)
       names(thisQuery) <- ifelse(grepl("-",names(thisQuery)),substr(names(thisQuery),1,4),names(thisQuery))
+      # consolidate quarterly data by the 4th quarter
+      names(thisQuery) <- gsub("Q4","",names(thisQuery))
+      thisQuery <- select(thisQuery, -contains("Q"))
+      
       if (nrow(datascope)==0) {
         datascope <- thisQuery
       } else {
@@ -42,10 +45,10 @@ for (cou in c("BRA")){
     }
   }
 }
-
-
-#test2 <- flatten(test$data)
-
+# remove estimated and product detail columns
+datascope <- datascope %>%
+  select(iso3,id, everything(), -estimated,-products)
+write.csv(datascope,"data/datascope.csv",row.names = FALSE)
 
 
 
