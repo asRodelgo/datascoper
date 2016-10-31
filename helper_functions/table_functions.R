@@ -4,17 +4,17 @@
   
   if (!is.null(selected_indicators)){  
     # brushed points
-    brushPoints <- dplyr::select(brushPoints,Country=CountryShort, CountryCode, Period, one_of(selected_indicators))
+    brushPoints <- dplyr::select(brushPoints,Country, iso3, Period, one_of(selected_indicators))
     #names(brushPoints) <- c("Country","Period",indicator_selection_plots_short)
     # actual data filter
-    selected_TCMN_data <- .filter_TCMN_data()
+    selected_datascope_data <- .filter_datascope_data()
     # merge
-    brushPoints_actual <- merge(selected_TCMN_data,brushPoints[,c("Country","Period")], 
-                                by.x = c("CountryShort","Period"), by.y = c("Country","Period"))
+    brushPoints_actual <- merge(selected_datascope_data,brushPoints[,c("Country","Period")], 
+                                by.x = c("Country","Period"), by.y = c("Country","Period"))
     brushPoints_actual <- brushPoints_actual %>%
-      dplyr::select(Country=CountryShort, CountryCode,Period, one_of(selected_indicators)) %>%
-      mutate(Country = paste0('<a href=',country_url,CountryCode,' target="_blank" >',Country,'</a>')) %>%
-      dplyr::select(-CountryCode)
+      dplyr::select(Country, iso3,Period, one_of(selected_indicators)) %>%
+      mutate(Country = paste0('<a href=',country_url,iso3,' target="_blank" >',Country,'</a>')) %>%
+      dplyr::select(-iso3)
     
     require(stringr) # to wrap label text
     names(brushPoints_actual) <- gsub("_"," ",names(brushPoints_actual))
@@ -36,7 +36,7 @@
     #return(str(brushPoints))
     brushPoints <- brushPoints_actual
   } else {
-    brushPoints <- dplyr::select(brushPoints,Country=CountryShort, Period)
+    brushPoints <- dplyr::select(brushPoints,Country, Period)
   }  
   return(brushPoints)  
 }

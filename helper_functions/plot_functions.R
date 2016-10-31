@@ -4,8 +4,8 @@
 .densityPlots <- function(colRegion,colPeriod,colCountry,colIndicator,clickCountry,clickPeriod,selected_indicators){
   
   tsne_points_filter <- .tSNE_plot_filter(colRegion,colPeriod,colCountry,colIndicator)
-  tsne_points_filter <- gather(tsne_points_filter, indicator, value, -CountryCode,-CountryShort,-RegionShortIncome,-RegionShort,-Period,-x,-y)
-  tsne_ready_gather <- gather(tsne_ready, indicator, value, -CountryCode,-CountryShort,-RegionShortIncome,-RegionShort,-Period,-x,-y)
+  tsne_points_filter <- gather(tsne_points_filter, indicator, value, -iso3,-Country,-IncomeLevel,-Region,-Period,-x,-y)
+  tsne_ready_gather <- gather(tsne_ready, indicator, value, -iso3,-Country,-IncomeLevel,-Region,-Period,-x,-y)
   
   tsne_points_filter <- filter(tsne_points_filter, indicator %in% selected_indicators)
   tsne_ready_gather <- filter(tsne_ready_gather, indicator %in% selected_indicators)
@@ -31,7 +31,7 @@
   } else {
     
     verticalLine <- tsne_points_filter %>%
-      filter(CountryShort == clickCountry, Period == clickPeriod) %>%
+    filter(Country == clickCountry, Period == clickPeriod) %>%
       dplyr::select(indicator, value)
     
     ggplot(data=tsne_ready_gather,aes(value)) + 
@@ -58,7 +58,7 @@
 .radarPlot <- function(brushPoints,selected_indicators){
   
   tsne_radar <- tsne_ready %>%
-    dplyr::select(one_of(selected_indicators), CountryShort, Period) %>%
+    dplyr::select(one_of(selected_indicators), Country, Period) %>%
     mutate_at(selected_indicators, funs(max,mean)) %>%
     #filter(Season == colPeriod) %>%
     dplyr::select(-Period)
@@ -69,12 +69,12 @@
   if (nrow(brushPoints)>0){
     #brushPoints <- merge(tsne_ready, brushPoints, by = c("Player","Season"))
     tsne_mean <- brushPoints %>%
-      dplyr::select(one_of(selected_indicators), CountryShort, Period) %>%
+      dplyr::select(one_of(selected_indicators), Country, Period) %>%
       mutate_at(selected_indicators, funs(mean)) %>%
       #dplyr::select(ends_with("_mean")) %>%
-      mutate(CountryShort = "mean of selected") %>%
+      mutate(Country = "mean of selected") %>%
       distinct(.keep_all=TRUE) %>%
-      dplyr::select(CountryShort, everything())
+      dplyr::select(Country, everything())
     
     names(tsne_mean) <- gsub("_mean","",names(tsne_mean))
     
@@ -82,8 +82,8 @@
     tsne_mean <- tsne_radar %>%
       dplyr::select(ends_with("_mean")) %>%
       distinct(.keep_all=TRUE) %>%
-      mutate(CountryShort = "mean of selected") %>%
-      dplyr::select(CountryShort, everything())
+      mutate(Country = "mean of selected") %>%
+      dplyr::select(Country, everything())
     
     names(tsne_mean) <- gsub("_mean","",names(tsne_mean))
   }
@@ -91,17 +91,17 @@
   tsne_max <- tsne_radar %>%
     dplyr::select(ends_with("_max")) %>%
     distinct(.keep_all=TRUE) %>%
-    mutate(CountryShort = "max") %>%
-    dplyr::select(CountryShort, everything())
+    mutate(Country = "max") %>%
+    dplyr::select(Country, everything())
   
   names(tsne_max) <- gsub("_max","",names(tsne_max))
   
   tsne_radar <- bind_rows(tsne_mean,tsne_max)
-  tsne_radar <- dplyr::select(tsne_radar, CountryShort, one_of(selected_indicators))
+  tsne_radar <- dplyr::select(tsne_radar, Country, one_of(selected_indicators))
   # shorter names to display
-  names(tsne_radar) <- c("CountryShort",indicator_selection_plots_short)
+  names(tsne_radar) <- c("Country",indicator_selection_plots_short)
   #ez.radarmap(df, "model", stats="mean", lwd=1, angle=0, fontsize=0.6, facet=T, facetfontsize=1, color=id, linetype=NULL)
-  ez.radarmap(tsne_radar, "CountryShort", stats="none", lwd=1, angle=0, fontsize=1.5, facet=F, facetfontsize=1, color=id, linetype=NULL) +
+  ez.radarmap(tsne_radar, "Country", stats="none", lwd=1, angle=0, fontsize=1.5, facet=F, facetfontsize=1, color=id, linetype=NULL) +
     theme(legend.key=element_blank(),
           legend.title=element_blank(),
           legend.position = "bottom",
@@ -124,25 +124,25 @@
   if (length(selected_indicators)>1){
     tsne_radar <- tsne_ready_select %>%
       group_by(group) %>%
-      dplyr::select(one_of(selected_indicators), CountryShort, Period,group) %>%
+      dplyr::select(one_of(selected_indicators), Country, Period,group) %>%
       mutate_at(selected_indicators, funs(max,mean)) %>%
       #filter(Season == colPeriod) %>%
       dplyr::select(-Period)
   } else { # introduce fictitious variable x to keep the _mean, _max structure when 
     # only 1 indicator is selected
     tsne_radar <- tsne_ready_select %>%
-      dplyr::select(one_of(selected_indicators),x, CountryShort, Period,group) %>%
+      dplyr::select(one_of(selected_indicators),x, Country, Period,group) %>%
       mutate_at(c(selected_indicators,"x"), funs(mean)) #%>%
     #filter(Season == colPeriod) %>%
     dplyr::select(-Period)
   }
-  #brushPoints <- filter(tsne_ready, CountryCode == "ALB")
+  #brushPoints <- filter(tsne_ready, iso3 == "ALB")
   brushPoints <- as.data.frame(brushPoints)
   
   if (nrow(brushPoints)>0){
     #brushPoints <- merge(tsne_ready, brushPoints, by = c("Player","Season"))
     tsne_mean <- brushPoints %>%
-      dplyr::select(one_of(selected_indicators), CountryShort, Period,RegionShort) %>%
+      dplyr::select(one_of(selected_indicators), Country, Period,Region) %>%
       mutate_at(selected_indicators, funs(mean)) %>%
       #dplyr::select(ends_with("_mean")) %>%
       mutate(group = "mean of selected") %>%
@@ -157,7 +157,7 @@
       group_by(group) %>%
       dplyr::select(ends_with("_mean"),group) %>%
       distinct(.keep_all=TRUE) %>%
-      #mutate(CountryShort = "mean of selected") %>%
+      #mutate(Country = "mean of selected") %>%
       dplyr::select(group, everything())
     
     names(tsne_mean) <- gsub("_mean","",names(tsne_mean))
@@ -210,25 +210,25 @@
     if (length(selected_indicators)>1){
       tsne_radar <- tsne_ready_select %>%
         group_by(group) %>%
-        dplyr::select(one_of(selected_indicators), CountryShort, Period,group) %>%
+        dplyr::select(one_of(selected_indicators), Country, Period,group) %>%
         mutate_at(selected_indicators, funs(max,mean)) %>%
         #filter(Season == colPeriod) %>%
         dplyr::select(-Period)
     } else { # introduce fictitious variable x to keep the _mean, _max structure when 
       # only 1 indicator is selected
       tsne_radar <- tsne_ready_select %>%
-        dplyr::select(one_of(selected_indicators),x, CountryShort, Period,group) %>%
+        dplyr::select(one_of(selected_indicators),x, Country, Period,group) %>%
         mutate_at(c(selected_indicators,"x"), funs(mean)) #%>%
       #filter(Season == colPeriod) %>%
       dplyr::select(-Period)
     }
-    #brushPoints <- filter(tsne_ready, CountryCode == "ALB")
+    #brushPoints <- filter(tsne_ready, iso3 == "ALB")
     brushPoints <- as.data.frame(brushPoints)
     
     if (nrow(brushPoints)>0){
       #brushPoints <- merge(tsne_ready, brushPoints, by = c("Player","Season"))
       tsne_mean <- brushPoints %>%
-        dplyr::select(one_of(selected_indicators), CountryShort, Period,RegionShort) %>%
+        dplyr::select(one_of(selected_indicators), Country, Period,Region) %>%
         mutate_at(selected_indicators, funs(mean)) %>%
         #dplyr::select(ends_with("_mean")) %>%
         mutate(group = "mean of selected") %>%
@@ -243,7 +243,7 @@
         group_by(group) %>%
         dplyr::select(ends_with("_mean"),group) %>%
         distinct(.keep_all=TRUE) %>%
-        #mutate(CountryShort = "mean of selected") %>%
+        #mutate(Country = "mean of selected") %>%
         dplyr::select(group, everything())
       
       names(tsne_mean) <- gsub("_mean","",names(tsne_mean))
@@ -305,13 +305,13 @@
   #set.seed(123) # to fix the jitter across different plots
   # cloud of points on top of boxplots
   tsne_points_filter <- as.data.frame(.tSNE_plot_filter(colRegion,colPeriod,colCountry,selected_indicators))
-  tsne_points_filter <- gather(tsne_points_filter, indicator, value, -CountryCode,-CountryShort,-RegionShortIncome,-RegionShort,-Period,-x,-y,-group)
+  tsne_points_filter <- gather(tsne_points_filter, indicator, value, -iso3,-Country,-IncomeLevel,-Region,-Period,-x,-y,-group)
   tsne_points_filter$indicator <- gsub("_"," ",tsne_points_filter$indicator)
   tsne_points_filter$indicator <- str_wrap(tsne_points_filter$indicator, width = 20)  
   tsne_points_filter$group <- str_wrap(tsne_points_filter$group,width=12)
   
   # boxplots
-  tsne_ready_gather <- gather(tsne_ready, indicator, value, -CountryCode,-CountryShort,-RegionShortIncome,-RegionShort,-Period,-x,-y)
+  tsne_ready_gather <- gather(tsne_ready, indicator, value, -iso3,-Country,-IncomeLevel,-Region,-Period,-x,-y)
   #tsne_points_filter <- filter(tsne_points_filter, indicator %in% selected_indicators)
   tsne_ready_gather <- filter(tsne_ready_gather, indicator %in% selected_indicators)
   tsne_ready_gather$indicator <- gsub("_"," ",tsne_ready_gather$indicator)
@@ -346,8 +346,8 @@
         geom_boxplot(color="darkgrey") +  
         geom_jitter(data=tsne_points_filter,aes(group=group,color=group),alpha=0.01,width=0.7) +  
         geom_jitter(data=brushPoints,aes(group=group,color=group),width=0.7) +  
-        geom_text(data=extremes_high,aes(label=str_wrap(paste0(CountryShort," (",Period,")"),width=12)),color="darkgrey",size=3,nudge_x = 0.35,nudge_y=-0.05,show.legend = FALSE) +
-        geom_text(data=extremes_low,aes(label=str_wrap(paste0(CountryShort," (",Period,")"),width=12)),color="darkgrey",size=3,nudge_x = 0.35,nudge_y=0.05,show.legend = FALSE) +           
+        geom_text(data=extremes_high,aes(label=str_wrap(paste0(Country," (",Period,")"),width=12)),color="darkgrey",size=3,nudge_x = 0.35,nudge_y=-0.05,show.legend = FALSE) +
+        geom_text(data=extremes_low,aes(label=str_wrap(paste0(Country," (",Period,")"),width=12)),color="darkgrey",size=3,nudge_x = 0.35,nudge_y=0.05,show.legend = FALSE) +           
         coord_flip() +
         theme(legend.key=element_blank(),
               legend.title=element_blank(),
@@ -367,8 +367,8 @@
       ggplot(data=tsne_ready_gather,aes(indicator,value)) + 
         geom_boxplot(color="darkgrey") +  
         geom_jitter(data=tsne_points_filter,aes(group=group,color=group),width=0.7) +
-        geom_text(data=extremes_high,aes(label=str_wrap(paste0(CountryShort," (",Period,")"),width=12)),color="darkgrey",size=3,nudge_x = 0.35,nudge_y=-0.05,show.legend = FALSE) +
-        geom_text(data=extremes_low,aes(label=str_wrap(paste0(CountryShort," (",Period,")"),width=12)),color="darkgrey",size=3,nudge_x = 0.35,nudge_y=0.05,show.legend = FALSE) +      
+        geom_text(data=extremes_high,aes(label=str_wrap(paste0(Country," (",Period,")"),width=12)),color="darkgrey",size=3,nudge_x = 0.35,nudge_y=-0.05,show.legend = FALSE) +
+        geom_text(data=extremes_low,aes(label=str_wrap(paste0(Country," (",Period,")"),width=12)),color="darkgrey",size=3,nudge_x = 0.35,nudge_y=0.05,show.legend = FALSE) +      
         coord_flip() +
         theme(legend.key=element_blank(),
               legend.title=element_blank(),
@@ -389,15 +389,15 @@
   } else { #click
     
     selectedPoint <- tsne_points_filter %>%
-      filter(CountryShort == clickCountry, Period == clickPeriod) %>%
-      dplyr::select(CountryShort,Period,indicator, value)
+      filter(Country == clickCountry, Period == clickPeriod) %>%
+      dplyr::select(Country,Period,indicator, value)
     
     ggplot(data=tsne_ready_gather,aes(indicator,value)) + 
       geom_boxplot(color="darkgrey") +  
       geom_jitter(data=tsne_points_filter,aes(group=group,color=group),alpha=0.5,width=0.7) + 
-      geom_point(data=selectedPoint,aes(fill=paste0(CountryShort," (",Period,")")),color="blue",size=4) +
-      geom_text(data=extremes_high,aes(label=str_wrap(paste0(CountryShort," (",Period,")"),width=12)),color="darkgrey",size=3,nudge_x = 0.35,nudge_y=-0.05,show.legend = FALSE) +
-      geom_text(data=extremes_low,aes(label=str_wrap(paste0(CountryShort," (",Period,")"),width=12)),color="darkgrey",size=3,nudge_x = 0.35,nudge_y=0.05,show.legend = FALSE) +      
+      geom_point(data=selectedPoint,aes(fill=paste0(Country," (",Period,")")),color="blue",size=4) +
+      geom_text(data=extremes_high,aes(label=str_wrap(paste0(Country," (",Period,")"),width=12)),color="darkgrey",size=3,nudge_x = 0.35,nudge_y=-0.05,show.legend = FALSE) +
+      geom_text(data=extremes_low,aes(label=str_wrap(paste0(Country," (",Period,")"),width=12)),color="darkgrey",size=3,nudge_x = 0.35,nudge_y=0.05,show.legend = FALSE) +      
       coord_flip() +
       theme(legend.key=element_blank(),
             legend.title=element_blank(),

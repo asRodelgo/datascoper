@@ -23,22 +23,22 @@
     
     # General Filters
     tsne_points_filter <- tsne_ready_plot %>%
-      filter(CountryShort %in% colCountry & RegionShort %in% colRegion 
+      filter(Country %in% colCountry & Region %in% colRegion 
              & Period %in% colPeriod) %>%
-      group_by(CountryShort,Period) %>%
+      group_by(Country,Period) %>%
       mutate(group = ifelse(length(colRegion)>2,
                             ifelse(length(colPeriod) == 2,
-                                   ifelse(length(colCountry)>2,Period,paste0(CountryShort," (",Period,")")),
-                                   ifelse(length(colCountry)>2,RegionShort,
-                                          ifelse(length(colPeriod)==1,paste0(CountryShort," (",Period,")"),CountryShort))),
-                            ifelse(length(colPeriod)>2,ifelse(length(colCountry)>2,RegionShort,CountryShort),
-                                   ifelse(length(colCountry)>2,paste0(RegionShort," (",Period,")"),paste0(CountryShort," (",Period,")")))))
+                                   ifelse(length(colCountry)>2,Period,paste0(Country," (",Period,")")),
+                                   ifelse(length(colCountry)>2,Region,
+                                          ifelse(length(colPeriod)==1,paste0(Country," (",Period,")"),Country))),
+                            ifelse(length(colPeriod)>2,ifelse(length(colCountry)>2,Region,Country),
+                                   ifelse(length(colCountry)>2,paste0(Region," (",Period,")"),paste0(Country," (",Period,")")))))
     
     
     centroid <- data.frame(x=(mean(tsne_points_filter$x)),y=mean(tsne_points_filter$y))
     
     tsne_points_filter_out <- tsne_ready_plot %>%
-      filter(!(CountryShort %in% colCountry & RegionShort %in% colRegion 
+      filter(!(Country %in% colCountry & Region %in% colRegion 
                & Period %in% colPeriod))
     # Skills filter
     if (!(colIndicator=="All")){
@@ -81,11 +81,11 @@
       
       if (showLabels){ # show names and year of countries
         ggplot(NULL, aes(x,y)) +  
-          #geom_point(data=tsne_points_filter,aes(group=CountryShort,color = CountryShort),size=2) +
+          #geom_point(data=tsne_points_filter,aes(group=Country,color = Country),size=2) +
           geom_point(data=tsne_points_filter,aes(group=group,color = group),size=2) +
           geom_point(data=tsne_points_filter_out,color=alpha("lightgrey",0.1)) +
           geom_point(data=centroid,color="red",size=3) + 
-          geom_text(data=tsne_points_filter,aes(label=str_wrap(paste0(CountryShort," (",Period,")"))),color="grey",nudge_y=0.1)+
+          geom_text(data=tsne_points_filter,aes(label=str_wrap(paste0(Country," (",Period,")"))),color="grey",nudge_y=0.1)+
           theme(legend.key=element_blank(),
                 legend.title=element_blank(),
                 legend.text = element_text(size = 15),

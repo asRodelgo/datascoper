@@ -20,29 +20,24 @@ for (h in helpers) source(h, local = TRUE)
 
 # ----------- tSNE data topology
 data_tsne <- .prepare_data()
-data_tsne_sample <- filter(data_tsne, Period < "2016" & Period > "2002")
+data_tsne_sample <- filter(data_tsne, Period < "2016" & Period > "2000")
 tsne_ready <- cbind(data_tsne_sample,tsne_points)
 names(tsne_ready)[ncol(tsne_ready)-1] <- "x"
 names(tsne_ready)[ncol(tsne_ready)] <- "y"
 # Default selector choices for tsne -----------
-countries_list <- sort(unique(data_tsne_sample$CountryShort))
+countries_list <- sort(unique(data_tsne_sample$Country))
 periods_list <- sort(unique(data_tsne_sample$Period))
-regions_list <- sort(unique(data_tsne_sample$RegionShort))
-indicators_list <- names(data_tsne_sample)[7:ncol(data_tsne_sample)]
+regions_list <- sort(unique(data_tsne_sample$Region))
+indicators_list <- names(data_tsne_sample)[!sapply(data_tsne_sample, is.character)]
+indicators_list <- gsub("X","",indicators_list)
 #
-indicator_selection_plots <- c("Ease_of_Doing_Business","Control_of_Corruption","Unemployment_rate",
-                               "Imports","MFN_Tariff_Simple_Average","Remittances_received_perc_of_GDP",
-                               "Income_per_capita_USDollars")
-indicator_selection_plots_short <- c("Ease_DB","Corruption","Unemployed",
-                                     "LPI","MFN_Tariff","Remittances",
-                                     "Manufac",
-                                     "Export","Import","Income")
-# filter TCMN_data by selected indicators in order to show the actual values on the 
+indicator_selection_plots <- c("289","315","321","350","361","416")
+# indicator_selection_plots_short <- c("Ease_DB","Corruption","Unemployed",
+#                                      "LPI","MFN_Tariff","Remittances",
+#                                      "Manufac",
+#                                      "Export","Import","Income")
+# filter data by selected indicators in order to show the actual values on the 
 # topology tab
-selected_TCMN_data <- filter(TCMN_data, IndicatorShort %in% indicator_selection_plots)
-
-# Datascope URLs
-country_url <- "http://datascope.amida-demo.com/countries/"
-indicator_url <- "http://datascope.amida-demo.com/indicators/"
-tsne_url <- "http://distill.pub/2016/misread-tsne/"
+selected_datascope_data <- filter(datascope, id %in% indicator_selection_plots)
 # ---------------
+

@@ -3,15 +3,17 @@
 # TSNE writer
 .generateTSNE <- function(){
   
+  datascope <- read.csv("data/datascope.csv", stringsAsFactors = FALSE)
+  
   data_tsne <- .prepare_data()
   
-  data_tsne_sample <- filter(data_tsne, Period > "2002" & Period < "2016")
+  data_tsne_sample <- filter(data_tsne, Period > "2000" & Period < "2016")
   
   if (nrow(data_tsne)>0){
-    num_iter <- 400
-    max_num_neighbors <- 100
+    num_iter <- 800
+    max_num_neighbors <- 50
     set.seed(456) # reproducitility
-    tsne_points <- tsne(data_tsne_sample[,-c(1:5)], 
+    tsne_points <- tsne(data_tsne_sample[,!sapply(data_tsne, is.character)], 
                         max_iter=as.numeric(num_iter), 
                         perplexity=as.numeric(max_num_neighbors), 
                         epoch=100)

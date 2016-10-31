@@ -47,20 +47,20 @@ tagList(
              #splitLayout(cellWidths = rep("33%", 3),
              selectizeInput('colPeriod', 'Period:', choices=c("All",sort(unique(data_tsne_sample$Period))),
                             selected=NULL,multiple=TRUE,options = list(maxItems = 2,dropdownParent = 'body')),
-             selectizeInput('colRegion', 'Region:', choices=c("All",sort(unique(data_tsne_sample$RegionShort))),
+             selectizeInput('colRegion', 'Region:', choices=c("All",sort(unique(data_tsne_sample$Region))),
                             selected=NULL,multiple=TRUE,options = list(maxItems = 2,dropdownParent = 'body')),
-             selectizeInput('colCountry', 'Country:', choices=c("All",sort(unique(data_tsne_sample$CountryShort))),
+             selectizeInput('colCountry', 'Country:', choices=c("All",sort(unique(data_tsne_sample$Country))),
                             selected=NULL,multiple=TRUE,options = list(maxItems = 2,dropdownParent = 'body')),
              #),
              HTML('<hr style="color: purple;">'),
              h4("Color by"),
-             selectizeInput('colIndicator', 'Indicator:', choices=c("All",sort(names(data_tsne_sample)[c(6:ncol(data_tsne_sample))])),
+             selectizeInput('colIndicator', 'Indicator:', choices=c("All",sort(names(data_tsne_sample)[!sapply(data_tsne_sample, is.character)])),
                             options = list(dropdownParent = 'body')),
              HTML('<hr style="color: purple;">'),
              h4("Select indicators"),
              selectizeInput(
-               'explore_variables', 'Select up to 10 indicators:', choices = sort(names(data_tsne_sample)[c(6:ncol(data_tsne_sample))]),
-               multiple = TRUE, selected = indicator_selection_plots, options = list(maxItems = 10)
+               'explore_variables', 'Select up to 10 indicators:', choices = sort(names(data_tsne_sample)[!sapply(data_tsne_sample, is.character)]),
+               multiple = TRUE, selected = paste0("X",indicator_selection_plots), options = list(maxItems = 10)
              )
       )
     ),

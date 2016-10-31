@@ -83,7 +83,7 @@ function(input, output, session) {
     
     wellPanel(
       style = style,
-      p(HTML(paste0(point$CountryShort," - ",point$Period,"<br/><br/>",
+      p(HTML(paste0(point$Country," - ",point$Period,"<br/><br/>",
                     "<div class='text' style='color:grey; font-size:12px;'>",panel_input,"</div>")))
     )
   })
@@ -100,7 +100,7 @@ function(input, output, session) {
                                          input$colIndicator,NULL,NULL)
     } else {
       plotTSNEdensities <- .densityPlots(input$colRegion,input$colPeriod,input$colCountry,
-                                         input$colIndicator,point$CountryShort,point$Period)
+                                         input$colIndicator,point$Country,point$Period)
     }
     return(plotTSNEdensities)
   })
@@ -143,7 +143,7 @@ function(input, output, session) {
                         maxpoints = 1, addDist = TRUE)
     
     boxplotBrushed <- .boxPlots(pointsBrushed,input$colRegion,input$colPeriod,input$colCountry,
-                                input$explore_variables,point$CountryShort,point$Period)
+                                input$explore_variables,point$Country,point$Period)
     
     return(boxplotBrushed)
     
@@ -166,7 +166,7 @@ function(input, output, session) {
       region <- input$colRegion
     }
     updateSelectizeInput(session, "colCountry",
-                         choices=sort(unique(filter(data_tsne_sample, RegionShort %in% region)$CountryShort)), 
+                         choices=sort(unique(filter(data_tsne_sample, Region %in% region)$Country)), 
                          selected=NULL)
     
   })  
