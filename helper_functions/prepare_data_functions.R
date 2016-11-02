@@ -32,6 +32,12 @@
   data_tsne <- data_spread[rowSums(is.na(data_spread))<ncol(data_spread[, !sapply(data_spread, is.character)]),]
   # remove all NA columns
   data_tsne <- data_tsne[,colSums(is.na(data_tsne))<nrow(data_tsne[, !sapply(data_tsne, is.character)])]
+  data_tsne <- data_tsne %>%
+    group_by(iso3,Period) %>%
+    mutate_if(is.numeric, funs(sum(.,na.rm=TRUE))) %>%
+    distinct(iso3,Period,.keep_all=TRUE) %>%
+    mutate_if(is.numeric, funs(na_if(.,0)))
+  data_tsne <- as.data.frame(data_tsne)
   
   return(data_tsne)
 }
