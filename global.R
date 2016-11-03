@@ -8,6 +8,7 @@ require(tsne) # t-SNE algorithm
 library(DT) # customize dataTable javascript library
 library(reshape2) # manipulate data
 library(knitr) # generate LaTeX PDF report
+library(jsonlite)
 
 # global data and functions -----------------------------------------
 

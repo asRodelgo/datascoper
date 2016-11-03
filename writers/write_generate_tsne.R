@@ -10,7 +10,7 @@
   data_tsne_sample <- filter(data_tsne, Period > "2000" & Period < "2016")
   
   if (nrow(data_tsne)>0){
-    num_iter <- 800
+    num_iter <- 1000
     max_num_neighbors <- 50
     set.seed(456) # reproducitility
     tsne_points <- tsne(data_tsne_sample[,!sapply(data_tsne, is.character)], 

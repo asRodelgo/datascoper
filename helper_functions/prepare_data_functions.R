@@ -25,6 +25,8 @@
 #   data_merge <- mutate(data_merge, IndicatorShort = gsub("-","_",IndicatorShort,fixed = TRUE))
 #   data_merge <- mutate(data_merge, IndicatorShort = gsub("/","_",IndicatorShort,fixed = TRUE))
 #   data_merge <- distinct(data_merge, CountryCode, Period, IndicatorShort, .keep_all = TRUE)
+  
+  # BOTTLENECK ########
   data_spread <- spread(data_filter, id, Observation)
   # make id columns start with a non-numeric character
   names(data_spread)[!sapply(data_spread, is.character)] <- paste0("X",names(data_spread)[!sapply(data_spread, is.character)])
@@ -32,6 +34,8 @@
   data_tsne <- data_spread[rowSums(is.na(data_spread))<ncol(data_spread[, !sapply(data_spread, is.character)]),]
   # remove all NA columns
   data_tsne <- data_tsne[,colSums(is.na(data_tsne))<nrow(data_tsne[, !sapply(data_tsne, is.character)])]
+  
+  # BOTTLENECK ########
   data_tsne <- data_tsne %>%
     group_by(iso3,Period) %>%
     mutate_if(is.numeric, funs(sum(.,na.rm=TRUE))) %>%
