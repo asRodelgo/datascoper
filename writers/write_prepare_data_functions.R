@@ -78,4 +78,6 @@
   data_tsne[,!sapply(data_tsne, is.character)] <- round(data_tsne[,!sapply(data_tsne, is.character)],3)
   
   return(data_tsne)
+  
+  write.csv(data_tsne, "data/data_tsne.csv",row.names = FALSE)
 }

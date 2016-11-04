@@ -6,7 +6,7 @@
   # 
   #colPeriod <- "All"
   #colCountry <- "All" 
-  #colRegion <- "MENA"
+  #colRegion <- "All"
   #colIndicator <- "All" 
   # ----------------------
   #

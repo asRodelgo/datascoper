@@ -20,7 +20,7 @@ helpers <- file.path("helper_functions", list.files("helper_functions", full.nam
 for (h in helpers) source(h, local = TRUE)
 
 # ----------- tSNE data topology
-data_tsne <- .prepare_data()
+data_tsne <- read.csv("data/data_tsne.csv",stringsAsFactors = FALSE)
 data_tsne_sample <- filter(data_tsne, Period < "2016" & Period > "2000")
 tsne_ready <- cbind(data_tsne_sample,tsne_points)
 names(tsne_ready)[ncol(tsne_ready)-1] <- "x"
