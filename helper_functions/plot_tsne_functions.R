@@ -6,7 +6,7 @@
   # 
   #colPeriod <- "All"
   #colCountry <- "All" 
-  #colRegion <- "All"
+  #colRegion <- c("LCN","EAS")
   #colIndicator <- "All" 
   # ----------------------
   #

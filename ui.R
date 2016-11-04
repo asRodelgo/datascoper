@@ -20,7 +20,7 @@ tagList(
              fluidRow(
                tags$img(src = "spinner.gif",
                         id = "loading-spinner"),
-               plotOutput('plotTSNE', height = "700px",
+               plotOutput('plotTSNE', height = "650px",
                           hover = hoverOpts("plot_hover", delay = 100, delayType = "debounce"),
                           click = clickOpts("plot_click"),
                           brush = brushOpts("plot_brush", delay = 100, delayType = "debounce"),
@@ -65,12 +65,12 @@ tagList(
       )
     ),
     fluidRow(
-      column(9,
+#      column(9,
 #              tags$img(src = "spinner.gif",
 #                       id = "loading-spinner"),
-             DT::dataTableOutput('tableBrushed')
-      ),
-      column(3,
+#             DT::dataTableOutput('tableBrushed')
+#      ),
+      column(12,
         br(),
         tags$img(src = "spinner.gif",
                  id = "loading-spinner"),
