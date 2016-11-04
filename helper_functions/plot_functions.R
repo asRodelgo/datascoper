@@ -307,7 +307,7 @@
   tsne_points_filter <- as.data.frame(.tSNE_plot_filter(colRegion,colPeriod,colCountry,selected_indicators))
   tsne_points_filter <- gather(tsne_points_filter, indicator, value, -iso3,-Country,
                                -IncomeLevel,-Region,-Period,-x,-y,-group) %>%
-    distinct(Country, Period, .keep_all=TRUE)
+    distinct(Country, Period, indicator, .keep_all=TRUE)
   tsne_points_filter$indicator <- gsub("_"," ",tsne_points_filter$indicator)
   tsne_points_filter$indicator <- str_wrap(tsne_points_filter$indicator, width = 20)  
   tsne_points_filter$group <- str_wrap(tsne_points_filter$group,width=12)
@@ -316,7 +316,8 @@
   tsne_ready_gather <- gather(tsne_ready, indicator, value, -iso3,-Country,
                               -IncomeLevel,-Region,-Period,-x,-y) %>%
     filter(indicator %in% selected_indicators) %>%
-    distinct(Country, Period, .keep_all=TRUE)
+    mutate(value = as.numeric(value)) %>%
+    distinct(Country, Period, indicator, .keep_all=TRUE)
   
   tsne_ready_gather$indicator <- gsub("_"," ",tsne_ready_gather$indicator)
   tsne_ready_gather$indicator <- str_wrap(tsne_ready_gather$indicator, width = 20)
