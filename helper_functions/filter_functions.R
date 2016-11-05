@@ -12,6 +12,9 @@
   # 
   if (length(tsne_ready)>0){ # if data do stuff
     if (!is.null(selected_indicators)){  # if at least 1 selected indicator
+      # map indicator labels to codes
+      selected_indicators <- paste0("X",filter(indicators_1_2, name %in% selected_indicators)$id)
+      #
       tsne_ready_select <- tsne_ready %>%
         dplyr::select(iso3, Period, Region, 
                       IncomeLevel, Country, x, y, 
@@ -33,8 +36,10 @@
                                           ifelse(length(colPeriod)==1,paste0(Country," (",Period,")"),Country))),
                             ifelse(length(colPeriod)>2,ifelse(length(colCountry)>2,Region,Country),
                                    ifelse(length(colCountry)>2,paste0(Region," (",Period,")"),paste0(Country," (",Period,")")))))
+    tsne_points_filter <- as.data.frame(tsne_points_filter)
     tsne_points_filter_out <- tsne_ready_select %>%
       filter(!(Country %in% colCountry & Region %in% colRegion & Period %in% colPeriod))
+    
     
   } else{ return()}
   #plot(c(1,1),type="n", frame.plot = FALSE, axes=FALSE, ann=FALSE)
@@ -54,6 +59,9 @@
   #selected_indicators <- paste0("X",selected_indicators)
   # 
   if (length(tsne_ready)>0){ # if data do stuff
+    # map indicator labels to codes
+    selected_indicators <- paste0("X",filter(indicators_1_2, name %in% selected_indicators)$id)
+    #
     tsne_ready_select <- tsne_ready %>%
       dplyr::select(iso3, Period, Region, 
                     IncomeLevel, Country, x, y, 

@@ -26,7 +26,10 @@ tagList(
                           brush = brushOpts("plot_brush", delay = 100, delayType = "debounce"),
                           dblclick = "plot_dblclick"),
                uiOutput("hover_info")
-             )
+             ),
+             tags$img(src = "spinner.gif",
+                      id = "loading-spinner"),
+             plotOutput('plotBoxplotBrushed')
       ),
       column(2,
              splitLayout(cellWidths = c("66%","33%"),
@@ -54,29 +57,29 @@ tagList(
              #),
              HTML('<hr style="color: purple;">'),
              h4("Color by"),
-             selectizeInput('colIndicator', 'Indicator:', choices=c("All",sort(names(data_tsne_sample)[!sapply(data_tsne_sample, is.character)])),
+             selectizeInput('colIndicator', 'Indicator:', choices=c("All","Country","Period","Missing values",indicators_1_2$name),#sort(names(data_tsne_sample)[!sapply(data_tsne_sample, is.character)])),
                             options = list(dropdownParent = 'body')),
              HTML('<hr style="color: purple;">'),
              h4("Select indicators"),
              selectizeInput(
-               'explore_variables', 'Select up to 10 indicators:', choices = sort(names(data_tsne_sample)[!sapply(data_tsne_sample, is.character)]),
-               multiple = TRUE, selected = paste0("X",indicator_selection_plots), options = list(maxItems = 10)
+               'explore_variables', 'Select up to 10 indicators:', choices = indicators_1_2$name,
+               multiple = TRUE, selected = indicator_selection_names, options = list(maxItems = 10)
              )
       )
-    ),
-    fluidRow(
+    # )
+#    fluidRow(
 #      column(9,
 #              tags$img(src = "spinner.gif",
 #                       id = "loading-spinner"),
 #             DT::dataTableOutput('tableBrushed')
 #      ),
-      column(12,
-        br(),
-        tags$img(src = "spinner.gif",
-                 id = "loading-spinner"),
-        plotOutput('plotBoxplotBrushed')
-      )
-    )  
+#       column(10,
+#         br(),
+#         tags$img(src = "spinner.gif",
+#                  id = "loading-spinner"),
+#         plotOutput('plotBoxplotBrushed')
+#       )
+     )  
       
   )
       

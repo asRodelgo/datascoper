@@ -21,6 +21,7 @@ for (h in helpers) source(h, local = TRUE)
 
 # ----------- tSNE data topology
 data_tsne <- read.csv("data/data_tsne.csv",stringsAsFactors = FALSE)
+data_tsne$Period <- as.character(data_tsne$Period) # to avoid continuous gradient color
 data_tsne_sample <- filter(data_tsne, Period < "2016" & Period > "2000")
 tsne_ready <- cbind(data_tsne_sample,tsne_points)
 names(tsne_ready)[ncol(tsne_ready)-1] <- "x"
@@ -33,6 +34,7 @@ indicators_list <- names(data_tsne_sample)[!sapply(data_tsne_sample, is.characte
 indicators_list <- gsub("X","",indicators_list)
 #
 indicator_selection_plots <- c("289","315","321","350","361","416")
+indicator_selection_names <- filter(indicators_1_2, id %in% indicator_selection_plots)$name
 # indicator_selection_plots_short <- c("Ease_DB","Corruption","Unemployed",
 #                                      "LPI","MFN_Tariff","Remittances",
 #                                      "Manufac",

@@ -302,23 +302,37 @@
 # Box plots
 .boxPlots <- function(brushPoints,colRegion,colPeriod,colCountry,selected_indicators,clickCountry,clickPeriod){      
   
+  # map indicator labels to codes
+  #selected_indicators <- paste0("X",filter(indicators_1_2, name %in% selected_indicators)$id)
+  #
   #set.seed(123) # to fix the jitter across different plots
   # cloud of points on top of boxplots
   tsne_points_filter <- as.data.frame(.tSNE_plot_filter(colRegion,colPeriod,colCountry,selected_indicators))
   tsne_points_filter <- gather(tsne_points_filter, indicator, value, -iso3,-Country,
                                -IncomeLevel,-Region,-Period,-x,-y,-group) %>%
     distinct(Country, Period, indicator, .keep_all=TRUE)
+  tsne_points_filter$indicator <- gsub("X","",tsne_points_filter$indicator)
+  tsne_points_filter <- merge(tsne_points_filter,indicators_1_2[,c("id","name")], by.x="indicator",by.y="id",all.x = TRUE) 
+  tsne_points_filter <- tsne_points_filter %>%
+    select(-indicator) %>%
+    select(indicator = name, everything())
   tsne_points_filter$indicator <- gsub("_"," ",tsne_points_filter$indicator)
   tsne_points_filter$indicator <- str_wrap(tsne_points_filter$indicator, width = 20)  
   tsne_points_filter$group <- str_wrap(tsne_points_filter$group,width=12)
   
   # boxplots
+  selected_indicators_codes <- paste0("X",filter(indicators_1_2, name %in% selected_indicators)$id)
   tsne_ready_gather <- gather(tsne_ready, indicator, value, -iso3,-Country,
                               -IncomeLevel,-Region,-Period,-x,-y) %>%
-    filter(indicator %in% selected_indicators) %>%
+    filter(indicator %in% selected_indicators_codes) %>%
     mutate(value = as.numeric(value)) %>%
     distinct(Country, Period, indicator, .keep_all=TRUE)
   
+  tsne_ready_gather$indicator <- gsub("X","",tsne_ready_gather$indicator)
+  tsne_ready_gather <- merge(tsne_ready_gather,indicators_1_2[,c("id","name")], by.x="indicator",by.y="id",all.x = TRUE) 
+  tsne_ready_gather <- tsne_ready_gather %>%
+    select(-indicator) %>%
+    select(indicator = name, everything())
   tsne_ready_gather$indicator <- gsub("_"," ",tsne_ready_gather$indicator)
   tsne_ready_gather$indicator <- str_wrap(tsne_ready_gather$indicator, width = 20)
   extremes_high <- tsne_ready_gather %>%
@@ -341,8 +355,13 @@
     
     if (nrow(brushPoints)>0){ #brush
       
-      brushPoints <- dplyr::select(brushPoints,group,one_of(selected_indicators))
+      brushPoints <- dplyr::select(brushPoints,group,one_of(selected_indicators_codes))
       brushPoints <- gather(brushPoints, indicator, value, -group)
+      brushPoints$indicator <- gsub("X","",brushPoints$indicator)
+      brushPoints <- merge(brushPoints,indicators_1_2[,c("id","name")], by.x="indicator",by.y="id",all.x = TRUE) 
+      brushPoints <- brushPoints %>%
+        select(-indicator) %>%
+        select(indicator = name, everything())
       brushPoints$indicator <- gsub("_"," ",brushPoints$indicator)
       brushPoints$indicator <- str_wrap(brushPoints$indicator, width = 20)
       brushPoints$group <- str_wrap(brushPoints$group,width=12)

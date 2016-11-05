@@ -3,6 +3,9 @@
 .brushTable <- function(brushPoints,selected_indicators){
   
   if (!is.null(selected_indicators)){  
+    # map indicator labels to codes
+    selected_indicators <- paste0("X",filter(indicators_1_2, name %in% selected_indicators)$id)
+    #
     # brushed points
     brushPoints <- filter(tsne_points_filter, Country %in% c("Bolivia","Colombia"))
     brushPoints <- dplyr::select(brushPoints,Country, iso3, Period, one_of(selected_indicators))
