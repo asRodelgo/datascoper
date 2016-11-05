@@ -80,3 +80,18 @@
   return(tsne_points_filter)
 }
 
+# filter datascope original data
+.filter_datascope <- function(){
+  
+  data_filter <- datascope %>%
+    gather(Period,Observation,-iso3,-id) %>%
+    inner_join(indicators_1_2, by="id") %>%
+    dplyr::select(iso3,id,Period,Observation,Indicator=name) %>%
+    distinct(iso3, Period, Indicator, .keep_all=TRUE) %>%
+    mutate(Period = gsub("X","",Period)) %>%
+    inner_join(select(countries,iso3,Country=name,Region=region,IncomeLevel=incomeLevel),
+               by="iso3")
+ 
+  return(data_filter) 
+  
+}  

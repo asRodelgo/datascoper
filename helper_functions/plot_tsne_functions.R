@@ -15,9 +15,17 @@
   if (colRegion=="All" || is.null(colRegion)) colRegion <- regions_list
   if (colPeriod=="All" || is.null(colPeriod)) colPeriod <- periods_list
   # map indicator labels to codes
-  if (!(colIndicator=="All" || is.null(colIndicator))) 
-    colIndicator <- paste0("X",filter(indicators_1_2, name %in% colIndicator)$id)
-  #
+  if (!(colIndicator=="All" || is.null(colIndicator))) {
+     
+    if (grepl("Missing",colIndicator)) {
+      colIndicator <- "missing_values"
+    } else if (colIndicator=="Period") {
+        colIndicator <- "Period"
+    } else {
+        colIndicator <- paste0("X",filter(indicators_1_2, name %in% colIndicator)$id)
+    }
+  }
+    #
   if (length(tsne_ready)>0){ # if data do stuff
     par(mar=c(0,0,0,0))
     
