@@ -19,6 +19,9 @@ source("data/read_data.R", local = TRUE)
 helpers <- file.path("helper_functions", list.files("helper_functions", full.names = FALSE))
 for (h in helpers) source(h, local = TRUE)
 
+# enhance datascope data with descriptors to main variables
+datascope_filter <- .filter_datascope()
+
 # ----------- tSNE data topology
 data_tsne <- read.csv("data/data_tsne.csv",stringsAsFactors = FALSE)
 data_tsne$Period <- as.character(data_tsne$Period) # to avoid continuous gradient color

@@ -54,29 +54,26 @@
   if (colCountry=="All" || is.null(colCountry)) colCountry <- countries_list
   if (colRegion=="All" || is.null(colRegion)) colRegion <- regions_list
   if (colPeriod=="All" || is.null(colPeriod)) colPeriod <- periods_list
-  
-  # transform indicators text into codes (for now, add/remove X)
-  #selected_indicators <- paste0("X",selected_indicators)
-  # 
+
   if (length(tsne_ready)>0){ # if data do stuff
-    # map indicator labels to codes
-    selected_indicators <- paste0("X",filter(indicators_1_2, name %in% selected_indicators)$id)
-    #
-    tsne_ready_select <- tsne_ready %>%
-      dplyr::select(iso3, Period, Region, 
-                    IncomeLevel, Country, x, y, 
-                    one_of(selected_indicators))
+    #datascope_filter <- .filter_datascope()
+    tsne_points_filter <- inner_join(datascope_filter,tsne_ready[,c("iso3","Period","x","y","missing_values")], by=c("iso3","Period")) %>%
+      filter(Country %in% colCountry & Period %in% colPeriod &
+               Indicator %in% selected_indicators) %>%
+      select(id,Period,Observation,Indicator,Country,x,y)
     
-    # General Filters
-    tsne_points_filter <- tsne_ready_select %>%
-      filter(Country %in% colCountry & Region %in% colRegion & Period %in% colPeriod)
-    tsne_points_filter_out <- tsne_ready_select %>%
-      filter(!(Country %in% colCountry & Region %in% colRegion & Period %in% colPeriod))
+    tsne_points_filter$id <- paste0("X",tsne_points_filter$id)
     
-  } else{ return()}
-  #plot(c(1,1),type="n", frame.plot = FALSE, axes=FALSE, ann=FALSE)
-  #graphics::text(1.5, 1,"Not enough data", col="red", cex=2)
+    tsne_points_filter <- tsne_points_filter %>%
+      group_by(Country,Period) %>%
+      spread(id,Observation) %>%
+      mutate_at(vars(num_range("X",1:5000)), funs(ifelse(all(is.na(.)),NA,round(sum(.,na.rm=TRUE),2)))) %>%
+      select(-Indicator) %>%
+      distinct(Country,Period,.keep_all=TRUE) %>%
+      as.data.frame()
   
+  } else{ return()}
+
   return(tsne_points_filter)
 }
 
@@ -95,3 +92,5 @@
   return(data_filter) 
   
 }  
+
+

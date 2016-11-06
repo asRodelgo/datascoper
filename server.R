@@ -78,8 +78,11 @@ function(input, output, session) {
     # actual tooltip created as wellPanel
     panel_input <- ""
     for (i in 1:length(input$explore_variables)){
-      panel_input <- paste0(panel_input,input$explore_variables[i],": ",eval(parse(text=paste0("point$","X",filter(indicators_1_2, name==input$explore_variables[i])$id))),"<br/>")
+      panel_input <- paste0(panel_input,input$explore_variables[i],": ",eval(parse(text=paste0("point$X",filter(indicators_1_2, name==input$explore_variables[i])$id))),"<br/>")
     }
+#     for (i in 1:length(input$explore_variables)){
+#       panel_input <- paste0(panel_input,point$Indicator[i],": ",point$Observation[i],"<br/>")
+#     }
     
     wellPanel(
       style = style,
