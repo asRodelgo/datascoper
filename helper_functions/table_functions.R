@@ -45,3 +45,25 @@
   return(brushPoints)  
 }
 
+.compare10_click <- function(colPeriod,colCountry){
+  
+  if (colCountry=="All" || is.null(colCountry)) colCountry <- countries_list
+  if (colPeriod=="All" || is.null(colPeriod)) colPeriod <- periods_list
+  
+  if (length(tsne_ready)>0){ # if data do stuff
+    
+    # coordenates x,y of clicked point
+    distCouPerX <- filter(tsne_ready,Country %in% colCountry, Period %in% colPeriod)$x
+    distCouPerY <- filter(tsne_ready,Country %in% colCountry, Period %in% colPeriod)$y
+    
+    tsne_points_filter <- tsne_ready %>%
+      select(Period,Country,x,y) %>%
+      mutate(dist = sqrt((x-distCouPerX)^2+(y-distCouPerY)^2)) %>%
+      arrange(dist) %>%
+      select(-x,-y)
+    
+  } else{ return()}
+  
+  return(tsne_points_filter)
+}
+

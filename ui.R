@@ -57,7 +57,7 @@ tagList(
              #),
              HTML('<hr style="color: purple;">'),
              h4("Color by"),
-             selectizeInput('colIndicator', 'Indicator:', choices=c("All","Country","Period","Missing values",indicators_1_2$name),#sort(names(data_tsne_sample)[!sapply(data_tsne_sample, is.character)])),
+             selectizeInput('colIndicator', 'Indicator:', choices=c("All","Missing values",indicators_1_2$name),#sort(names(data_tsne_sample)[!sapply(data_tsne_sample, is.character)])),
                             options = list(dropdownParent = 'body')),
              HTML('<hr style="color: purple;">'),
              h4("Select indicators"),
