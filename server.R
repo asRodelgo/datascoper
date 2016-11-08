@@ -227,7 +227,7 @@ function(input, output, session) {
   
   # update country selector with region selector
   observe({
-    if (is.null(input$colRegion)){
+    if ((input$colRegion=="All") || (is.null(input$colRegion))){
       region <- regions_list
     } else{
       region <- input$colRegion
@@ -238,6 +238,8 @@ function(input, output, session) {
     
   })  
   
-
+  output$thisperiod <- renderText(input$colPeriod)
+  output$thisregion <- renderText(input$colRegion)
+  output$thiscountry <- renderText(input$colCountry)
 
 }
