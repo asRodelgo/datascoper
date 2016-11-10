@@ -97,10 +97,10 @@ function(input, output, session) {
     point <- nearPoints(.tSNE_plot_filter_hover(input$colRegion,input$colPeriod,input$colCountry,
                                                 input$explore_variables),
                         click, threshold = 4, maxpoints = 1, addDist = TRUE)
-    
-    tableTop10 <- .compare10_click(point$Period,point$Country)
 #     
     if (nrow(point) == 0) return(NULL)
+    # calculate top 10 closest Country,Period pairs to the clicked one
+    tableTop10 <- .compare10_click(point$Period,point$Country)
     # calculate point position INSIDE the image as percent of total dimensions
     # from left (horizontal) and from top (vertical)
     left_pct <- (click$x - click$domain$left) / (click$domain$right - click$domain$left)
@@ -135,9 +135,9 @@ function(input, output, session) {
                     "left:", left_px + 2, "px; top:", top_px + 2, "px;")
     
     # actual tooltip created as wellPanel
-    panel_input <- ""
-    for (i in 1:10){
-      panel_input <- paste0("<br>",panel_input,tableTop10$Country[i]," - ",tableTop10$Period[i],": ",tableTop10$dist[i],"<br/>")
+    panel_input <- paste0("Closest 10 Economies to ",tableTop10$Country[1]," (",tableTop10$Period[1],")<br/><br/>")
+    for (i in 2:11){
+      panel_input <- paste0(panel_input,tableTop10$Country[i]," (",tableTop10$Period[i],") ",": ",round(tableTop10$dist[i],3),"<br/>")
     }
     #     for (i in 1:length(input$explore_variables)){
     #       panel_input <- paste0(panel_input,point$Indicator[i],": ",point$Observation[i],"<br/>")

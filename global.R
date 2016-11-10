@@ -36,7 +36,8 @@ regions_list <- sort(unique(data_tsne_sample$Region))
 indicators_list <- names(data_tsne_sample)[!sapply(data_tsne_sample, is.character)]
 indicators_list <- gsub("X","",indicators_list)
 #
-indicator_selection_plots <- c("289","315","321","350","361","416")
+indicator_selection_plots <- filter(indicators_1_2, rank == 1)$id 
+#("289","315","321","350","361","416")
 indicator_selection_names <- filter(indicators_1_2, id %in% indicator_selection_plots)$name
 # indicator_selection_plots_short <- c("Ease_DB","Corruption","Unemployed",
 #                                      "LPI","MFN_Tariff","Remittances",
