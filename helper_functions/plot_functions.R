@@ -300,7 +300,7 @@
 }
 
 # Box plots
-.boxPlots <- function(brushPoints,colRegion,colPeriod,colCountry,selected_indicators,clickCountry,clickPeriod){      
+.boxPlots <- function(brushPoints,colRegion,colPeriod,colCountry,selected_indicators,clickCountry=NULL,clickPeriod=NULL){      
   
   # map indicator labels to codes
   #selected_indicators <- paste0("X",filter(indicators_1_2, name %in% selected_indicators)$id)

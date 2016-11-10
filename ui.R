@@ -28,7 +28,8 @@ tagList(
                           click = clickOpts("plot_click"),
                           brush = brushOpts("plot_brush", delay = 100, delayType = "debounce"),
                           dblclick = "plot_dblclick"),
-               uiOutput("hover_info")
+               uiOutput("hover_info"),
+               uiOutput("click_info")
              ),
              tags$img(src = "spinner.gif",
                       id = "loading-spinner"),
