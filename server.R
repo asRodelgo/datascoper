@@ -39,7 +39,7 @@ function(input, output, session) {
     hover <- input$plot_hover
     point <- nearPoints(.tSNE_plot_filter_hover(input$colRegion,input$colPeriod,input$colCountry,
                                                 input$explore_variables),
-                        hover, threshold = 4, maxpoints = 1, addDist = TRUE)
+                        hover, threshold = 4, maxpoints = 1)
     
     if (nrow(point) == 0) return(NULL)
     # calculate point position INSIDE the image as percent of total dimensions
@@ -91,7 +91,7 @@ function(input, output, session) {
     )
   })
   
-  # tooltip hover over scatterplot points: see https://gitlab.com/snippets/16220
+  # tooltip click over scatterplot points: see https://gitlab.com/snippets/16220
   output$click_info <- renderUI({
     click <- input$plot_click
     point <- nearPoints(.tSNE_plot_filter_hover(input$colRegion,input$colPeriod,input$colCountry,
@@ -126,38 +126,75 @@ function(input, output, session) {
         top_px <- click$range$top + top_pct * (click$range$bottom - click$range$top)
       }
     }
-    
-    
     # create style property fot tooltip
     # background color is set so tooltip is a bit transparent
     # z-index is set so we are sure are tooltip will be on top
     style <- paste0("position:absolute; z-index:100; background-color: rgba(245, 245, 245, 0.85); ",
                     "left:", left_px + 2, "px; top:", top_px + 2, "px;")
-    
     # actual tooltip created as wellPanel
-    panel_input <- paste0("Closest 10 Economies to ",tableTop10$Country[1]," (",tableTop10$Period[1],")<br/><br/>")
+    panel_input <- paste0('Closest 10 Economies (Eucl. dist.) to ','<a href=',country_url,filter(countries, name==tableTop10$Country[1])$iso3,' target="_blank" >',tableTop10$Country[1],' (',tableTop10$Period[1],')</a><br/><br/>')
     for (i in 2:11){
-      panel_input <- paste0(panel_input,tableTop10$Country[i]," (",tableTop10$Period[i],") ",": ",round(tableTop10$dist[i],3),"<br/>")
+      panel_input <- paste0(panel_input,'<a href=',country_url,filter(countries, name==tableTop10$Country[i])$iso3,' target="_blank" >',tableTop10$Country[i],' (',tableTop10$Period[i],')</a> : ',round(tableTop10$dist[i],3),'<br/>')
     }
-    #     for (i in 1:length(input$explore_variables)){
-    #       panel_input <- paste0(panel_input,point$Indicator[i],": ",point$Observation[i],"<br/>")
-    #     }
     
     wellPanel(
       style = style,
-      p(HTML(panel_input))#,
-      #tableOutput('compare10')
-                    #"<div class='text' style='color:grey; font-size:12px;'>",panel_input,"</div>")))
+      p(HTML(panel_input))
     )
   })
-#   
-#   # detailed table for brushed points
-#   output$compare10 <- renderDataTable({
+
+  # tooltip click over scatterplot points: see https://gitlab.com/snippets/16220
+#   output$brush_info <- renderUI({
+#     brush <- input$plot_brush
+#     brushedPoints <- brushedPoints(.tSNE_plot_filter_hover(input$colRegion,input$colPeriod,input$colCountry,
+#                                                 input$explore_variables),brush)
+#     #     
+#     if (nrow(brushedPoints) == 0) return(NULL)
+#     # calculate top 10 closest Country,Period pairs to the clicked one
+#     tableSummaryBrushed <- .summaryBrushed(pointsBrushed,input$colRegion,input$colPeriod,input$colCountry,
+#                                            input$explore_variables)
+#     # calculate point position INSIDE the image as percent of total dimensions
+#     # from left (horizontal) and from top (vertical)
+#     left_pct <- (click$x - click$domain$left) / (click$domain$right - click$domain$left)
+#     top_pct <- (click$domain$top - click$y) / (click$domain$top - click$domain$bottom)
 #     
-#     tableCompare10 <- head(.compare10_click(input$colPeriod,input$colCountry),10)
-#     return(tableCompare10)
+#     # calculate distance from left and bottom side of the picture in pixels
+#     # avoid overlapping with other objects by keeping the tooltip inside the frame
+#     if (left_pct > .75){
+#       if (top_pct >.75){
+#         left_px <- -15*click$range$left + left_pct * (click$range$right - click$range$left)
+#         top_px <- click$range$top + top_pct * (click$range$bottom - click$range$top)
+#       } else {
+#         left_px <- -15*click$range$left + left_pct * (click$range$right - click$range$left)
+#         top_px <- click$range$top + top_pct * (click$range$bottom - click$range$top)
+#       }
+#     } else {
+#       
+#       if (top_pct >.75){
+#         left_px <- click$range$left + left_pct * (click$range$right - click$range$left)
+#         top_px <- click$range$top + top_pct * (click$range$bottom - click$range$top)
+#       } else{
+#         left_px <- click$range$left + left_pct * (click$range$right - click$range$left)
+#         top_px <- click$range$top + top_pct * (click$range$bottom - click$range$top)
+#       }
+#     }
+#     # create style property fot tooltip
+#     # background color is set so tooltip is a bit transparent
+#     # z-index is set so we are sure are tooltip will be on top
+#     style <- paste0("position:absolute; z-index:100; background-color: rgba(245, 245, 245, 0.85); ",
+#                     "left:", left_px + 2, "px; top:", top_px + 2, "px;")
+#     # actual tooltip created as wellPanel
+#     panel_input <- paste0('Closest 10 Economies (Eucl. dist.) to ','<a href=',country_url,filter(countries, name==tableTop10$Country[1])$iso3,' target="_blank" >',tableTop10$Country[1],' (',tableTop10$Period[1],')</a><br/><br/>')
+#     for (i in 2:11){
+#       panel_input <- paste0(panel_input,'<a href=',country_url,filter(countries, name==tableTop10$Country[i])$iso3,' target="_blank" >',tableTop10$Country[i],' (',tableTop10$Period[i],')</a><p> : ',round(tableTop10$dist[i],3),'</p><br/>')
+#     }
+#     
+#     wellPanel(
+#       style = style,
+#       p(HTML(panel_input))
+#     )
 #   })
-  
+#   
   # densities for selected variables
   output$plotTSNEdensities <- renderPlot({
     
@@ -222,27 +259,26 @@ function(input, output, session) {
   # detailed table for brushed points
   output$tableBrushed <- DT::renderDataTable({
     brush <- input$plot_brush
-    pointsBrushed <- brushedPoints(.tSNE_plot_filter(input$colRegion,input$colPeriod,input$colCountry,
-                                                     input$explore_variables), brush)
+    pointsBrushed <- brushedPoints(.tSNE_plot_filter_hover(input$colRegion,input$colPeriod,input$colCountry,
+                                                           input$explore_variables), brush)
     tableBrushed <- .brushTable(pointsBrushed,input$explore_variables)
     return(tableBrushed)
   },options = list(dom = 't',pageLength = 25, paging = TRUE),rownames= FALSE,escape=FALSE)
   
   # update country selector with region selector
   observe({
-    if ((input$colRegion=="All") || (is.null(input$colRegion))){
-      region <- regions_list
-    } else{
+    
+    if (!((input$colRegion=="All") || (is.null(input$colRegion)))){
       region <- input$colRegion
+      updateSelectizeInput(session, "colCountry",
+                           choices=sort(unique(filter(data_tsne_sample, Region %in% region)$Country)), 
+                           selected=NULL)
     }
-    updateSelectizeInput(session, "colCountry",
-                         choices=sort(unique(filter(data_tsne_sample, Region %in% region)$Country)), 
-                         selected=NULL)
     
   })  
   
-#   output$thisperiod <- renderText(input$colPeriod)
-#   output$thisregion <- renderText(input$colRegion)
-#   output$thiscountry <- renderText(input$colCountry)
+#    output$thisperiod <- renderText(input$colPeriod)
+#    output$thisregion <- renderText(input$colRegion)
+#    output$thiscountry <- renderText(input$colCountry)
 
 }

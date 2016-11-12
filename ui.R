@@ -20,9 +20,9 @@ tagList(
              fluidRow(
                tags$img(src = "spinner.gif",
                         id = "loading-spinner"),
-               #h4(textOutput('thisperiod')),
-               #h4(textOutput('thisregion')),
-               #h4(textOutput('thiscountry')),
+#                h4(textOutput('thisperiod')),
+#                h4(textOutput('thisregion')),
+#                h4(textOutput('thiscountry')),
                plotOutput('plotTSNE', height = "650px",
                           hover = hoverOpts("plot_hover", delay = 100, delayType = "debounce"),
                           click = clickOpts("plot_click"),

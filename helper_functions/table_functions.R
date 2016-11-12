@@ -67,3 +67,20 @@
   return(tsne_points_filter)
 }
 
+.summary_brush <- function(brushPoints,selected_indicators){
+  
+  #brushPoints <- filter(tsne_ready, Country == "Spain")
+  if (!is.null(selected_indicators)){  
+    # map indicator labels to codes
+    selected_indicators <- paste0("X",filter(indicators_1_2, name %in% selected_indicators)$id)
+    # brushed points
+    brushPoints <- select(brushPoints,Country, Period, one_of(selected_indicators)) %>%
+      summarize_if(is.numeric,funs(mean(.,na.rm=TRUE)))
+    
+    
+  } else {
+    brushPoints <- dplyr::select(brushPoints,Country, Period)
+  }  
+  return(brushPoints)  
+  
+}

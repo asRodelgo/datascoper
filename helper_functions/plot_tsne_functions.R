@@ -31,7 +31,7 @@
 #       mutate(color = "lightgrey", colorDots = "grey")
 #     
     # General Filters
-    tsne_points_filter <- tsne_ready %>%
+    tsne_points_filter <- select(tsne_ready, -num_range("X",1:5000)) %>%
       filter(Country %in% colCountry & Region %in% colRegion 
              & Period %in% colPeriod) %>%
       group_by(Country,Period) %>%
@@ -41,9 +41,9 @@
                                    ifelse(length(colCountry)>2,Region,
                                           ifelse(length(colPeriod)==1,paste0(Country," (",Period,")"),Country))),
                             ifelse(length(colPeriod)>2,ifelse(length(colCountry)>2,Region,Country),
-                                   ifelse(length(colCountry)>2,paste0(Region," (",Period,")"),paste0(Country," (",Period,")")))))
-    tsne_points_filter <- as.data.frame(tsne_points_filter)
-    
+                                   ifelse(length(colCountry)>2,paste0(Region," (",Period,")"),paste0(Country," (",Period,")"))))) %>%
+      as.data.frame()
+    #write.csv(tsne_points_filter, "data/plot_data.csv", row.names=FALSE)
     centroid <- data.frame(x=(mean(tsne_points_filter$x)),y=mean(tsne_points_filter$y))
     
     tsne_points_filter_out <- tsne_ready_plot %>%
@@ -91,7 +91,7 @@
       if (showLabels){ # show names and year of countries
         ggplot(NULL, aes(x,y)) +  
           #geom_point(data=tsne_points_filter,aes(group=Country,color = Country),size=2) +
-          geom_point(data=tsne_points_filter,aes(group=group,color = group),size=2) +
+          geom_point(data=tsne_points_filter,aes(color = group),size=2) +
           geom_point(data=tsne_points_filter_out,color=alpha("lightgrey",0.1)) +
           geom_point(data=centroid,color="red",size=3) + 
           geom_text(data=tsne_points_filter,aes(label=str_wrap(paste0(Country," (",Period,")"))),color="grey",nudge_y=0.1)+
@@ -108,7 +108,7 @@
                 axis.ticks = element_blank())
       } else {
         ggplot(NULL, aes(x,y)) +  
-          geom_point(data=tsne_points_filter,aes(group=group,color = group),size=2) +
+          geom_point(data=tsne_points_filter,aes(color = group),size=2) +
           geom_point(data=tsne_points_filter_out,color=alpha("lightgrey",0.1)) +
           geom_point(data=centroid,color="red",size=3) + 
           theme(legend.key=element_blank(),
