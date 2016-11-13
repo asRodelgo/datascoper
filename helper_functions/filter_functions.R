@@ -69,7 +69,7 @@
       #group_by(Country,Period) %>%
       spread(id,Observation) %>%
       select(Country,Period,one_of(these_indicators),x,y) %>%
-      mutate_at(vars(num_range("X",1:5000)), funs(ifelse(all(is.na(.)),NA,round(sum(.,na.rm=TRUE),2)))) %>%
+      mutate_at(vars(num_range("X",1:5000)), funs(round(.,2))) %>%
       #select(-Indicator) %>%
       distinct(Country,Period,.keep_all=TRUE) %>%
       as.data.frame()

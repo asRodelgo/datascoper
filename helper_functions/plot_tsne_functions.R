@@ -46,7 +46,7 @@
     #write.csv(tsne_points_filter, "data/plot_data.csv", row.names=FALSE)
     centroid <- data.frame(x=(mean(tsne_points_filter$x)),y=mean(tsne_points_filter$y))
     
-    tsne_points_filter_out <- tsne_ready_plot %>%
+    tsne_points_filter_out <- tsne_ready %>%
       filter(!(Country %in% colCountry & Region %in% colRegion 
                & Period %in% colPeriod))
     # Skills filter
