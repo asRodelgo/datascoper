@@ -146,52 +146,56 @@ function(input, output, session) {
   # tooltip click over scatterplot points: see https://gitlab.com/snippets/16220
   output$brush_info <- renderUI({
     brush <- input$plot_brush
-    brushedPoints <- brushedPoints(.tSNE_plot_filter_hover(input$colRegion,input$colPeriod,input$colCountry,
-                                                input$explore_variables),brush)
+    brushedP <- brushedPoints(.tSNE_plot_filter_brush(input$colRegion,input$colPeriod,input$colCountry
+                                                      ),brush)
     #     
-    if (nrow(brushedPoints) == 0) return(NULL)
-    # calculate top 10 closest Country,Period pairs to the clicked one
-    tableSummaryBrushed <- .summaryBrushed(pointsBrushed,input$colRegion,input$colPeriod,input$colCountry,
-                                           input$explore_variables)
+    if (nrow(brushedP) == 0) return(NULL)
+    
+    brushSummary <- .summary_brush(brushedP,input$explore_variables)
+    
     # calculate point position INSIDE the image as percent of total dimensions
     # from left (horizontal) and from top (vertical)
-    left_pct <- (click$x - click$domain$left) / (click$domain$right - click$domain$left)
-    top_pct <- (click$domain$top - click$y) / (click$domain$top - click$domain$bottom)
-    
-    # calculate distance from left and bottom side of the picture in pixels
-    # avoid overlapping with other objects by keeping the tooltip inside the frame
-    if (left_pct > .75){
-      if (top_pct >.75){
-        left_px <- -15*click$range$left + left_pct * (click$range$right - click$range$left)
-        top_px <- click$range$top + top_pct * (click$range$bottom - click$range$top)
-      } else {
-        left_px <- -15*click$range$left + left_pct * (click$range$right - click$range$left)
-        top_px <- click$range$top + top_pct * (click$range$bottom - click$range$top)
-      }
-    } else {
-      
-      if (top_pct >.75){
-        left_px <- click$range$left + left_pct * (click$range$right - click$range$left)
-        top_px <- click$range$top + top_pct * (click$range$bottom - click$range$top)
-      } else{
-        left_px <- click$range$left + left_pct * (click$range$right - click$range$left)
-        top_px <- click$range$top + top_pct * (click$range$bottom - click$range$top)
-      }
-    }
+#     left_pct <- (brush$x - brush$domain$left) / (brush$domain$right - brush$domain$left)
+#     top_pct <- (brush$domain$top - brush$y) / (brush$domain$top - brush$domain$bottom)
+#     
+#     # calculate distance from left and bottom side of the picture in pixels
+#     # avoid overlapping with other objects by keeping the tooltip inside the frame
+#     if (left_pct > .75){
+#       if (top_pct >.75){
+#         left_px <- -15*brush$range$left + left_pct * (brush$range$right - brush$range$left)
+#         top_px <- brush$range$top + top_pct * (brush$range$bottom - brush$range$top)
+#       } else {
+#         left_px <- -15*brush$range$left + left_pct * (brush$range$right - brush$range$left)
+#         top_px <- brush$range$top + top_pct * (brush$range$bottom - brush$range$top)
+#       }
+#     } else {
+#       
+#       if (top_pct >.75){
+#         left_px <- brush$range$left + left_pct * (brush$range$right - brush$range$left)
+#         top_px <- brush$range$top + top_pct * (brush$range$bottom - brush$range$top)
+#       } else{
+#         left_px <- brush$range$left + left_pct * (brush$range$right - brush$range$left)
+#         top_px <- brush$range$top + top_pct * (brush$range$bottom - brush$range$top)
+#       }
+#     }
+    left_px <- 0
+    top_px <- 0
     # create style property fot tooltip
     # background color is set so tooltip is a bit transparent
     # z-index is set so we are sure are tooltip will be on top
     style <- paste0("position:absolute; z-index:100; background-color: rgba(245, 245, 245, 0.85); ",
                     "left:", left_px + 2, "px; top:", top_px + 2, "px;")
     # actual tooltip created as wellPanel
-    panel_input <- paste0('Closest 10 Economies (Eucl. dist.) to ','<a href=',country_url,filter(countries, name==tableTop10$Country[1])$iso3,' target="_blank" >',tableTop10$Country[1],' (',tableTop10$Period[1],')</a><br/><br/>')
-    for (i in 2:11){
-      panel_input <- paste0(panel_input,'<a href=',country_url,filter(countries, name==tableTop10$Country[i])$iso3,' target="_blank" >',tableTop10$Country[i],' (',tableTop10$Period[i],')</a><p> : ',round(tableTop10$dist[i],3),'</p><br/>')
+    panel_input <- paste0('Averages for brushed points:<br/><br/>')
+    for (i in 1:length(input$explore_variables)){
+      #panel_input <- paste0(panel_input,input$explore_variables[i],": ",eval(parse(text=paste0("brushedP$X",filter(indicators_1_2, name==input$explore_variables[i])$id))),'<br/>')
+      panel_input <- paste0(panel_input,input$explore_variables[i],": ",filter(brushSummary,id %in% input$explore_variables[i])$Avg,"<br/>")
     }
     
     wellPanel(
       style = style,
       p(HTML(panel_input))
+      #p(str(brushedP))
     )
   })
 #   
@@ -257,14 +261,14 @@ function(input, output, session) {
   })
   
   # detailed table for brushed points
-  output$tableBrushed <- DT::renderDataTable({
-    brush <- input$plot_brush
-    pointsBrushed <- brushedPoints(.tSNE_plot_filter_hover(input$colRegion,input$colPeriod,input$colCountry,
-                                                           input$explore_variables), brush)
-    tableBrushed <- .brushTable(pointsBrushed,input$explore_variables)
-    return(tableBrushed)
-  },options = list(dom = 't',pageLength = 25, paging = TRUE),rownames= FALSE,escape=FALSE)
-  
+#   output$tableBrushed <- DT::renderDataTable({
+#     brush <- input$plot_brush
+#     pointsBrushed <- brushedPoints(.tSNE_plot_filter_hover(input$colRegion,input$colPeriod,input$colCountry,
+#                                                            input$explore_variables), brush)
+#     tableBrushed <- .brushTable(pointsBrushed,input$explore_variables)
+#     return(tableBrushed)
+#   },options = list(dom = 't',pageLength = 25, paging = TRUE),rownames= FALSE,escape=FALSE)
+#   
   # update country selector with region selector
   observe({
     

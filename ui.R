@@ -29,7 +29,8 @@ tagList(
                           brush = brushOpts("plot_brush", delay = 100, delayType = "debounce"),
                           dblclick = "plot_dblclick"),
                uiOutput("hover_info"),
-               uiOutput("click_info")
+               uiOutput("click_info")#,
+               #uiOutput("brush_info")
              ),
              tags$img(src = "spinner.gif",
                       id = "loading-spinner"),
@@ -43,8 +44,8 @@ tagList(
                                                              '<a href=',tsne_url,' target="_blank">tSNE</a>. ',
                                                              'Each of the points corresponds to a country and a year. Basic controls:</p>',
                                                              '<div><ul><li>hover over a point for country stats</li>',
-                                                             '<li>click on a point for placement on boxplots</li>',
-                                                             '<li>brush over a group of points to activate the table and placement on boxplots</li>',
+                                                             '<li>click on a point for top 10 closest countries</li>',
+                                                             '<li>brush over a group of points to filter on boxplots</li>',
                                                              '<li>brush and double click over a group of points to zoom in</li>',
                                                              '<li>use filter selectors to visualize different elements on cloud</li>',
                                                              '<li>use color selector to visualize level values for an indicator</li>',

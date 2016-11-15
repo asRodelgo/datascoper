@@ -441,3 +441,22 @@
   
   
 }
+
+# brush tooltip
+.summary_brush <- function(brushedP,selected_indicators){
+  
+#   tsne_points_filter$id <- paste0("X",brushedP$id)
+  these_indicators <- paste0("X",filter(indicators_1_2, name %in% selected_indicators)$id)
+  #brushedP <- tsne_points_filter
+  tsne_points_mean <- tsne_points_filter %>%
+    filter(id %in% these_indicators) %>%
+    group_by(id) %>%
+    #spread(id,Observation) %>%
+    #select(Country,Period,one_of(these_indicators),x,y) %>%
+    mutate(Avg = mean(Observation,na.rm=TRUE), Std = sd(Observation,na.rm=TRUE)) %>%
+    #select(-Indicator) %>%
+    distinct(id,.keep_all=TRUE) %>%
+    as.data.frame()
+  
+  return(tsne_points_mean)
+}

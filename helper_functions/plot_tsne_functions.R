@@ -31,7 +31,7 @@
 #       mutate(color = "lightgrey", colorDots = "grey")
 #     
     # General Filters
-    tsne_points_filter <- select(tsne_ready, -num_range("X",1:5000)) %>%
+    tsne_points_filter <- select(tsne_ready,everything()) %>% #, -num_range("X",1:5000)) %>%
       filter(Country %in% colCountry & Region %in% colRegion 
              & Period %in% colPeriod) %>%
       group_by(Country,Period) %>%

@@ -79,6 +79,28 @@
   return(tsne_points_filter)
 }
 
+# Filters for brush over tooltips ---------------------------------------------------------
+.tSNE_plot_filter_brush <- function(colRegion,colPeriod,colCountry){
+  #
+  if (colCountry=="All" || is.null(colCountry)) colCountry <- countries_list
+  if (colRegion=="All" || is.null(colRegion)) colRegion <- regions_list
+  if (colPeriod=="All" || is.null(colPeriod)) colPeriod <- periods_list
+  
+  if (length(tsne_ready)>0){ # if data do stuff
+    #datascope_filter <- .filter_datascope()
+    tsne_points_filter <- inner_join(tsne_ready[,c("iso3","Period","x","y","missing_values")],datascope_filter, by=c("iso3","Period")) %>%
+      filter(Country %in% colCountry & Region %in% colRegion & Period %in% colPeriod) %>%
+      dplyr::select(id,Period,Observation,Country,x,y) %>%
+      distinct(Country,Period,id, .keep_all=TRUE)
+    
+     tsne_points_filter$id <- paste0("X",tsne_points_filter$id)
+    
+    #write.csv(tsne_points_filter, "data/hover_data.csv", row.names=FALSE)
+  } else{ return()}
+  
+  return(tsne_points_filter)
+}
+
 # filter datascope original data
 .filter_datascope <- function(){
   
