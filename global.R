@@ -47,4 +47,8 @@ indicator_selection_names <- filter(indicators_1_2, id %in% indicator_selection_
 # topology tab
 selected_datascope_data <- filter(datascope, id %in% indicator_selection_plots)
 # ---------------
+# TCdata360 URLs
+country_url <- "http://tcdata360.worldbank.org/countries/"
+indicator_url <- "http://tcdata360.worldbank.org/indicators/"
+tsne_url <- "http://distill.pub/2016/misread-tsne/"
 
