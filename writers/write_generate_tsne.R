@@ -7,10 +7,10 @@
   
   data_tsne <- .prepare_data()
   
-  data_tsne_sample <- filter(data_tsne, Period > "2000" & Period < "2016")
+  data_tsne_sample <- filter(data_tsne, Period > "1995" & Period < "2017")
   
   if (nrow(data_tsne)>0){
-    num_iter <- 1000
+    num_iter <- 500
     max_num_neighbors <- 50
     set.seed(456) # reproducitility
     tsne_points <- tsne(data_tsne_sample[,!sapply(data_tsne, is.character)], 
@@ -27,4 +27,5 @@
   write.csv(tsne_points, "data/tsne_points.csv", row.names = FALSE)
 }
 
-
+# Run it!
+.generateTSNE()

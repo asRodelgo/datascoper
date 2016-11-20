@@ -25,7 +25,7 @@ datascope_filter <- .filter_datascope()
 # ----------- tSNE data topology
 data_tsne <- read.csv("data/data_tsne.csv",stringsAsFactors = FALSE)
 data_tsne$Period <- as.character(data_tsne$Period) # to avoid continuous gradient color
-data_tsne_sample <- filter(data_tsne, Period < "2016" & Period > "2000")
+data_tsne_sample <- filter(data_tsne, Period < "2017" & Period > "1995")
 tsne_ready <- cbind(data_tsne_sample,tsne_points)
 names(tsne_ready)[ncol(tsne_ready)-1] <- "x"
 names(tsne_ready)[ncol(tsne_ready)] <- "y"

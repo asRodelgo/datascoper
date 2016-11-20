@@ -5,13 +5,7 @@ datascope <- read.csv("data/datascope.csv",stringsAsFactors = FALSE)
 countries <- read.csv("data/countries.csv", stringsAsFactors = FALSE)
 # Query indicators:
 indicators <- read.csv("data/indicators.csv",stringsAsFactors = FALSE)
-# Data from ranks 1-2 for all countries
-types_allowed <- c("value","percent_of_gdp","dtf","usd_millions","us_dollars","percent")
-
-indicators_1_2 <- indicators %>%
-  filter(rank < 3, valueType %in% types_allowed) %>%
-  distinct(name,.keep_all=TRUE) %>%
-  arrange(name)
-
+# Top ranked and cleaned up indicators
+indicators_1_2 <- read.csv("data/indicators_1_2.csv",stringsAsFactors = FALSE)
 
 

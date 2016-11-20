@@ -78,5 +78,9 @@
   
   return(data_tsne)
   
-  write.csv(data_tsne, "data/data_tsne.csv",row.names = FALSE)
 }
+# Run it!
+write.csv(data_tsne, "data/data_tsne.csv",row.names = FALSE)
+
+#.prepare_data()
+
