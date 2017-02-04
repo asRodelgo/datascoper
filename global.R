@@ -12,6 +12,9 @@ library(jsonlite)
 
 # global data and functions -----------------------------------------
 
+# bookmark this app
+enableBookmarking(store = "url")
+
 # Read the global data available for the whole session. Will be loaded only once
 source("data/read_data.R", local = TRUE)
 # These functions are called before the actual server work. They will be loaded for the

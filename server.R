@@ -3,6 +3,21 @@ source("global.R", local = TRUE) #global functions available for the whole sessi
 
 function(input, output, session) {
   
+  ## ------------------------------
+  # bookmarking with the state encoded in the URL, updates the browser's location bar 
+  # automatically each time an input value changes
+  # observe({
+  #   # Trigger this observer every time an input changes
+  #   reactiveValuesToList(input)
+  #   session$doBookmark()
+  # })
+  # onBookmarked(function(url) {
+  #   updateQueryString(url)
+  # })
+  # # Exclude these parameters from being bookmarked in the url
+  # setBookmarkExclude(c("help_click"))
+  ## ------------------------------
+  
   # Plot tSNE ---------------------
   # Single zoomable plot (on left)
   ranges <- reactiveValues(x = NULL, y = NULL)

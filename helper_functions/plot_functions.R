@@ -368,8 +368,8 @@
       
       ggplot(data=tsne_ready_gather,aes(indicator,value)) + 
         geom_boxplot(color="darkgrey") +  
-        geom_jitter(data=tsne_points_filter,aes(group=group,color=group),alpha=0.01,width=0.7) +  
-        geom_jitter(data=brushPoints,aes(group=group,color=group),width=0.7) +  
+        geom_jitter(data=tsne_points_filter,aes(group=group,color=group),alpha=0.01,width=0.3) +  
+        geom_jitter(data=brushPoints,aes(group=group,color=group),width=0.3) +  
         geom_text(data=extremes_high,aes(label=str_wrap(paste0(Country," (",Period,")"),width=12)),color="darkgrey",size=3,nudge_x = 0.35,nudge_y=-0.05,show.legend = FALSE) +
         geom_text(data=extremes_low,aes(label=str_wrap(paste0(Country," (",Period,")"),width=12)),color="darkgrey",size=3,nudge_x = 0.35,nudge_y=0.05,show.legend = FALSE) +           
         #coord_flip() +
@@ -390,7 +390,7 @@
       
       ggplot(data=tsne_ready_gather,aes(indicator,value)) + 
         geom_boxplot(color="darkgrey") +  
-        geom_jitter(data=tsne_points_filter,aes(group=group,color=group),width=0.7) +
+        geom_jitter(data=tsne_points_filter,aes(group=group,color=group),width=0.3) +
         geom_text(data=extremes_high,aes(label=str_wrap(paste0(Country," (",Period,")"),width=12)),color="darkgrey",size=3,nudge_x = 0.35,nudge_y=-0.05,show.legend = FALSE) +
         geom_text(data=extremes_low,aes(label=str_wrap(paste0(Country," (",Period,")"),width=12)),color="darkgrey",size=3,nudge_x = 0.35,nudge_y=0.05,show.legend = FALSE) +      
         #coord_flip() +
@@ -418,7 +418,7 @@
     
     ggplot(data=tsne_ready_gather,aes(indicator,value)) + 
       geom_boxplot(color="darkgrey") +  
-      geom_jitter(data=tsne_points_filter,aes(group=group,color=group),alpha=0.5,width=0.7) + 
+      geom_jitter(data=tsne_points_filter,aes(group=group,color=group),alpha=0.5,width=0.3) + 
       geom_point(data=selectedPoint,aes(fill=paste0(Country," (",Period,")")),color="blue",size=4) +
       geom_text(data=extremes_high,aes(label=str_wrap(paste0(Country," (",Period,")"),width=12)),color="darkgrey",size=3,nudge_x = 0.35,nudge_y=-0.05,show.legend = FALSE) +
       geom_text(data=extremes_low,aes(label=str_wrap(paste0(Country," (",Period,")"),width=12)),color="darkgrey",size=3,nudge_x = 0.35,nudge_y=0.05,show.legend = FALSE) +      
