@@ -15,7 +15,7 @@ function(input, output, session) {
   #   updateQueryString(url)
   # })
   # # Exclude these parameters from being bookmarked in the url
-  setBookmarkExclude(c("help_click","plot_hover","plot_click","plot_brush","plot_dbclick"))
+  setBookmarkExclude(c("help_click","plot_hover","plot_click","plot_brush","plot_dblclick"))
   ## ------------------------------
   # bookmarking state
   # Save extra values in state$values when we bookmark...
