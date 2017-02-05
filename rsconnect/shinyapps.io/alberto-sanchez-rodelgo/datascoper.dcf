@@ -1,9 +1,10 @@
 name: datascoper
+title:
 account: alberto-sanchez-rodelgo
 server: shinyapps.io
 appId: 134493
-bundleId: 630339
+bundleId: 700689
 url: https://alberto-sanchez-rodelgo.shinyapps.io/datascoper/
-when: 1480516970.04367
+when: 1486224652.5197
 asMultiple: FALSE
 asStatic: FALSE

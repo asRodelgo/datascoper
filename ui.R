@@ -4,6 +4,7 @@ library(shinythemes)
 library(shinyBS)
 library(shinyjs)
 library(V8)
+library(htmltools)
 
 source("global.R", local = TRUE)
 
@@ -24,7 +25,8 @@ function(req) { # for bookmarking to work, UI must be embedded in a function
   #                h4(textOutput('thisperiod')),
   #                h4(textOutput('thisregion')),
   #                h4(textOutput('thiscountry')),
-                  bookmarkButton(),
+                               
+                 bookmarkButton(),
                  plotOutput('plotTSNE', height = "650px",
                             hover = hoverOpts("plot_hover", delay = 100, delayType = "debounce"),
                             click = clickOpts("plot_click"),

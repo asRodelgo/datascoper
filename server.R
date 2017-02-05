@@ -15,8 +15,28 @@ function(input, output, session) {
   #   updateQueryString(url)
   # })
   # # Exclude these parameters from being bookmarked in the url
-  # setBookmarkExclude(c("help_click"))
+  setBookmarkExclude(c("help_click","plot_hover","plot_click","plot_brush","plot_dbclick"))
   ## ------------------------------
+  # bookmarking state
+  # Save extra values in state$values when we bookmark...
+  # configureBookmarking(input$bookmark, type = "persist",
+  #                      onBookmark = function(restoreContext) {
+  #                        restoreContext$values <- list(
+  #                          click = input$plot_click,
+  #                          brush = input$plot_brush,
+  #                          hover = input$plot_hover
+  #                        )
+  #                      },
+  #                      onRestore = function(restoreContext) {
+  #                        if (length(restoreContext$values) == 0)
+  #                          return()
+  #                        session$onFlushed(function() {
+  #                          input$plot_click <- restoreContext$values$click
+  #                          input$plot_brush <- restoreContext$values$brush
+  #                          input$plot_hover <- restoreContext$values$hover
+  #                        })
+  #                      }
+  # )
   
   # Plot tSNE ---------------------
   # Single zoomable plot (on left)
